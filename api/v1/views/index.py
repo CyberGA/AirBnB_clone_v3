@@ -14,5 +14,12 @@ def status():
 @app_views.route('/stats', methods=['GET'], strict_slashes=False)
 def use_count():
     """use the newly added count() method from storage"""
-    count = storage.count()
-    return jsonify({"count": count})
+    counts = {
+        "users": storage.count("User"),
+        "places": storage.count("Place"),
+        "reviews": storage.count("Review"),
+        "amenities": storage.count("Amenity"),
+        "cities": storage.count("City"),
+        "states": storage.count("State"),
+    }
+    return jsonify(counts)
