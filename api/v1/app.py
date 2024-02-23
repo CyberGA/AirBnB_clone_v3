@@ -15,6 +15,7 @@ def close_storage(exception):
     """Freeing up resources such as database connections"""
     storage.close()
 
+
 @app.errorhandler(404)
 def not_found(error):
     """Handler for 404 errors."""
