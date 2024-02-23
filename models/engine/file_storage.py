@@ -65,8 +65,7 @@ class FileStorage:
             if key in self.__objects:
                 del self.__objects[key]
 
-    def:wq
-    get(self, cls, id):
+    def get(self, cls, id):
         """
         Returns the object based on the class name and its ID, or
         None if not found
@@ -80,16 +79,11 @@ class FileStorage:
         return None
 
     def count(self, cls=None):
-        """count the number of objects in storage
-        """
-        all_class = classes.values()
-        if not cls:
-            count = 0
-            for clas in all_class:
-                count += len(models.storage.all(clas).values())
+        """count the number of objects in storage"""
+        if cls is None:
+            return len(models.storage.all())
         else:
-            count = len(models.storage.all(cls).values())
-        return count
+            return len(models.storage.all(cls))
 
     def close(self):
         """call reload() method for deserializing the JSON file to objects"""
