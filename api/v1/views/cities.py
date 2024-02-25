@@ -67,7 +67,8 @@ def create_city(state_id):
     return jsonify(city.to_dict()), 201
 
 
-@app_views.route('/api/v1/cities/<city_id>', methods=['PUT'], strict_slashes=False)
+@app_views.route('/api/v1/cities/<city_id>', methods=['PUT'],
+                 strict_slashes=False)
 def put_city(city_id):
     """Update the State object with all key-value pairs of the dictionary."""
     city = get_state_by_id(city_id)

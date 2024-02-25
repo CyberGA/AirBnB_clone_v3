@@ -20,11 +20,12 @@ def get_user_by_id(user_id):
 def get_users():
     """Retrieves the list of all User objects."""
     users = [user.to_dict()
-                 for user in storage.all(User).values()]
+             for user in storage.all(User).values()]
     return jsonify(users)
 
 
-@app_views.route('/api/v1/users/<user_id>', methods=['GET'], strict_slashes=False)
+@app_views.route('/api/v1/users/<user_id>', methods=['GET'],
+                 strict_slashes=False)
 def get_user_id(user_id):
     """Retrieve amenities by id."""
     user = get_user_by_id(user_id)
@@ -56,7 +57,8 @@ def create_user():
     return jsonify(user.to_dict()), 201
 
 
-@app_views.route('/api/v1/users/<user_id>', methods=['PUT'], strict_slashes=False)
+@app_views.route('/api/v1/users/<user_id>', methods=['PUT'],
+                 strict_slashes=False)
 def put_user(user_id):
     """Update the Amenity object with all key-value pairs of the dictionary."""
     user = get_user_by_id(user_id)
