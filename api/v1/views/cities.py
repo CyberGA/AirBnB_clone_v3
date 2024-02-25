@@ -1,4 +1,5 @@
-cript that creates a new view for State objects that
+#!/usr/bin/python3
+"""a script that creates a new view for State objects that
     handles all default RESTFul API actions
 """
 from flask import jsonify, abort, request
