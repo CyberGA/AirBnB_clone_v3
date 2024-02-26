@@ -2,7 +2,7 @@
 """a script that creates a new view for State objects that
     handles all default RESTFul API actions
 """
-from flask import jsonify, abort, request
+from flask import jsonify, abort, request, make_response
 from models.user import User
 from models import storage
 from api.v1.views import app_views
@@ -24,7 +24,7 @@ def get_users():
     return jsonify(users)
 
 
-@app_views.route('/api/v1/users/<user_id>', methods=['GET'],
+@app_views.route('/users/<user_id>', methods=['GET'],
                  strict_slashes=False)
 def get_user_id(user_id):
     """Retrieve amenities by id."""
@@ -32,14 +32,14 @@ def get_user_id(user_id):
     return jsonify(user.to_dict())
 
 
-@app_views.route('/api/v1/users/<user_id>', methods=['DELETE'],
+@app_views.route('/users/<user_id>', methods=['DELETE'],
                  strict_slashes=False)
 def delete_user(user_id):
     """Delete a state given its id."""
     user = get_user_by_id(user_id)
     storage.delete(user)
     storage.save()
-    return jsonify({}), 200
+    return make_response(jsonify({}), 200)
 
 
 @app_views.route('/users', methods=['POST'], strict_slashes=False)
@@ -54,10 +54,10 @@ def create_user():
         abort(400, description='Missing password')
     user = User(**http_body)
     user.save()
-    return jsonify(user.to_dict()), 201
+    return make_response(jsonify(user.to_dict()), 201)
 
 
-@app_views.route('/api/v1/users/<user_id>', methods=['PUT'],
+@app_views.route('/users/<user_id>', methods=['PUT'],
                  strict_slashes=False)
 def put_user(user_id):
     """Update the Amenity object with all key-value pairs of the dictionary."""
@@ -69,4 +69,4 @@ def put_user(user_id):
         if key not in ['id', 'created_at', 'updated_at', 'email']:
             setattr(user, key, value)
     user.save()
-    return jsonify(user.to_dict()), 200
+    return make_response(jsonify(user.to_dict()), 200)

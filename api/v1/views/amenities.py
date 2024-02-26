@@ -2,7 +2,7 @@
 """a script that creates a new view for State objects that
     handles all default RESTFul API actions
 """
-from flask import jsonify, abort, request
+from flask import jsonify, abort, request, make_response
 from models.amenity import Amenity
 from models import storage
 from api.v1.views import app_views
@@ -24,7 +24,7 @@ def get_amenities():
     return jsonify(amenities)
 
 
-@app_views.route('/api/v1/amenities/<amenity_id>', methods=['GET'],
+@app_views.route('/amenities/<amenity_id>', methods=['GET'],
                  strict_slashes=False)
 def get_amenity_id(amenity_id):
     """Retrieve amenities by id."""
@@ -32,14 +32,14 @@ def get_amenity_id(amenity_id):
     return jsonify(amenity.to_dict())
 
 
-@app_views.route('/api/v1/amenities/<amenity_id>', methods=['DELETE'],
+@app_views.route('/amenities/<amenity_id>', methods=['DELETE'],
                  strict_slashes=False)
 def delete_amenity(amenity_id):
     """Delete a state given its id."""
     amenity = get_amenity_by_id(amenity_id)
     storage.delete(amenity)
     storage.save()
-    return jsonify({}), 200
+    return make_response(jsonify({}), 200)
 
 
 @app_views.route('/amenities', methods=['POST'], strict_slashes=False)
@@ -52,10 +52,10 @@ def create_amenity():
         abort(400, description='Missing name')
     amenity = Amenity(**http_body)
     amenity.save()
-    return jsonify(amenity.to_dict()), 201
+    return make_response(jsonify(amenity.to_dict()), 201)
 
 
-@app_views.route('/api/v1/amenities/<amenity_id>', methods=['PUT'],
+@app_views.route('/amenities/<amenity_id>', methods=['PUT'],
                  strict_slashes=False)
 def put_amenity(amenity_id):
     """Update the Amenity object with all key-value pairs of the dictionary."""
@@ -67,4 +67,4 @@ def put_amenity(amenity_id):
         if key not in ['id', 'created_at', 'updated_at']:
             setattr(amenity, key, value)
     amenity.save()
-    return jsonify(amenity.to_dict()), 200
+    return make_response(jsonify(amenity.to_dict()), 200)

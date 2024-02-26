@@ -2,7 +2,7 @@
 """a script that creates a new view for State objects that
     handles all default RESTFul API actions
 """
-from flask import jsonify, abort, request
+from flask import jsonify, abort, request, make_response
 from models.city import City
 from models.state import State
 from models import storage
@@ -31,28 +31,28 @@ def get_cities(state_id):
     """Returns the cities associated with a given state id."""
     state = get_state_by_id(state_id)
     cities = [city.to_dict() for city in state.cities]
-    return jsonify(cities), 200
+    return jsonify(cities)
 
 
-@app_views.route('/api/v1/cities/<city_id>', methods=['GET'],
+@app_views.route('/cities/<city_id>', methods=['GET'],
                  strict_slashes=False)
 def get_city(city_id):
     """Retrieve a City object by its ID."""
     city = get_city_by_id(city_id)
-    return jsonify(city.to_dict()), 200
+    return jsonify(city.to_dict())
 
 
-@app_views.route('/api/v1/cities/<city_id>', methods=['DELETE'],
+@app_views.route('/cities/<city_id>', methods=['DELETE'],
                  strict_slashes=False)
 def delete_city(city_id):
     """Delete a city given its id."""
     city = get_city_by_id(city_id)
     storage.delete(city)
     storage.save()
-    return jsonify({}), 200
+    return make_response(jsonify({}), 200)
 
 
-@app_views.route('/api/v1/states/<state_id>/cities', methods=['POST'],
+@app_views.route('/states/<state_id>/cities', methods=['POST'],
                  strict_slashes=False)
 def create_city(state_id):
     """Create a new city associated with the provided state."""
@@ -62,12 +62,13 @@ def create_city(state_id):
         abort(400, description='Not a JSON')
     if 'name' not in http_body:
         abort(400, description='Missing name')
-    city = City(name=http_body['name'], state_id=state_id)
+    city = City(**http_body)
+    city.state_id = state_id
     city.save()
-    return jsonify(city.to_dict()), 201
+    return make_response(jsonify(city.to_dict()), 201)
 
 
-@app_views.route('/api/v1/cities/<city_id>', methods=['PUT'],
+@app_views.route('/cities/<city_id>', methods=['PUT'],
                  strict_slashes=False)
 def put_city(city_id):
     """Update the State object with all key-value pairs of the dictionary."""
@@ -81,4 +82,4 @@ def put_city(city_id):
     for key, value in filtered_body.items():
         setattr(city, key, value)
     city.save()
-    return jsonify(city.to_dict()), 200
+    return make_response(jsonify(city.to_dict()), 200)

@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """A script to return the status of your API"""
-from flask import Flask, jsonify
+from flask import Flask, jsonify, make_response
 from flask_cors import CORS
 from models import storage
 from api.v1.views import app_views
@@ -22,7 +22,7 @@ def close_storage(exception):
 @app.errorhandler(404)
 def not_found(error):
     """Handler for 404 errors."""
-    return jsonify({"error": "Not found"}), 404
+    return make_response(jsonify({"error": "Not found"}), 404)
 
 
 if __name__ == "__main__":

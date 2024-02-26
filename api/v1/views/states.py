@@ -2,7 +2,7 @@
 """a script that creates a new view for State objects that
     handles all default RESTFul API actions
 """
-from flask import jsonify, abort, request
+from flask import jsonify, abort, request, make_response
 from models.state import State
 from models import storage
 from api.v1.views import app_views
@@ -37,7 +37,7 @@ def delete_state(state_id):
     state = get_state_by_id(state_id)
     storage.delete(state)
     storage.save()
-    return jsonify({}), 200
+    return make_response(jsonify({}), 200)
 
 
 @app_views.route('/states', methods=['POST'], strict_slashes=False)
@@ -50,7 +50,7 @@ def create_state():
         abort(400, description='Missing name')
     state = State(**http_body)
     state.save()
-    return jsonify(state.to_dict()), 201
+    return make_response(jsonify(state.to_dict()), 201)
 
 
 @app_views.route('/states/<state_id>', methods=['PUT'], strict_slashes=False)
@@ -64,4 +64,4 @@ def put_state(state_id):
         if key not in ['id', 'created_at', 'updated_at']:
             setattr(state, key, value)
     state.save()
-    return jsonify(state.to_dict()), 200
+    return make_response(jsonify(state.to_dict()), 200)
