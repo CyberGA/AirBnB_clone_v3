@@ -55,7 +55,7 @@ def get_review(review_id):
                  strict_slashes=False)
 def delete_review(review_id):
     """Delete a review given its id."""
-    review = get_review_by_id(place_id)
+    review = get_review_by_id(review_id)
     storage.delete(review)
     storage.save()
     return make_response(jsonify({}), 200)
