@@ -66,7 +66,7 @@ def put_user(user_id):
     if not http_body:
         abort(400, description='Not a JSON')
     for key, value in http_body.items():
-        if key not in ['id', 'created_at', 'updated_at']:
+        if key not in ['id', 'created_at', 'updated_at', 'email']:
             setattr(user, key, value)
     user.save()
     return jsonify(user.to_dict()), 200

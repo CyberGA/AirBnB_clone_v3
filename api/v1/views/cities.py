@@ -71,12 +71,14 @@ def create_city(state_id):
                  strict_slashes=False)
 def put_city(city_id):
     """Update the State object with all key-value pairs of the dictionary."""
-    city = get_state_by_id(city_id)
+    city = get_city_by_id(city_id)
     http_body = request.get_json()
     if not http_body:
         abort(400, description='Not a JSON')
-    for key, value in http_body.items():
-        if key not in ['id', 'created_at', 'updated_at']:
-            setattr(city, key, value)
+    ignore_keys = ['id', 'state_id', 'created_at', 'updated_at']
+    filtered_body = {key: value for key, value in http_body.items()
+                     if key not in ignore_keys}
+    for key, value in filtered_body.items():
+        setattr(city, key, value)
     city.save()
     return jsonify(city.to_dict()), 200
