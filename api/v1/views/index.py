@@ -15,11 +15,11 @@ def status():
 def use_count():
     """use the newly added count() method from storage"""
     counts = {
-        "users": storage.count(User),
-        "places": storage.count(Place),
-        "reviews": storage.count(Review),
-        "amenities": storage.count(Amenity),
-        "cities": storage.count(City),
-        "states": storage.count(State),
+        "users": storage.count("User"),
+        "places": storage.count("Place"),
+        "reviews": storage.count("Review"),
+        "amenities": storage.count("Amenity"),
+        "cities": storage.count("City"),
+        "states": storage.count("State"),
     }
     return jsonify(counts)
