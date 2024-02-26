@@ -56,7 +56,7 @@ def delete_city(city_id):
                  strict_slashes=False)
 def create_city(state_id):
     """Create a new city associated with the provided state."""
-    state = get_state_by_id(state_id)
+    get_state_by_id(state_id)
     http_body = request.get_json()
     if not http_body:
         abort(400, description='Not a JSON')
